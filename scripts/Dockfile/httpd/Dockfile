@@ -1,0 +1,17 @@
+# create new
+FROM centos
+MAINTAINER Shuhui <shuhui@vqiu.cn>
+
+# Update Yum Repostory
+RUN curl -s -L http://mirrors.aliyun.com/repo/Centos-7.repo -o \
+	/etc/yum.repos.d/CentOS-Base.repo && \
+	curl -s -L http://mirrors.aliyun.com/repo/epel-7.repo -o \
+	/etc/yum.repos.d/epel.repo
+RUN yum clean all && \
+	yum makecache fast && \
+	yum -y update
+	yum -y install httpd
+RUN yum clean all
+EXPOSE 80
+CMD ["-D","FOREGROUND"]
+ENTRYPOINT ["/usr/sbin/httpd"]

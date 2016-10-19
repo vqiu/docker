@@ -1,0 +1,22 @@
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /data/log/nginx/access/*.log
+
+      document_type: nginx-access
+      backoff: 5s
+      max_backoff: 20s
+      ignore_older: 2h
+  registry_file: /var/lib/filebeat/registry
+output:
+  logstash:
+    hosts: ["logstash:5044"]
+    bulk_max_size: 10240
+  #tls:
+   #insecure: true
+   #certificate_authorities: ["/etc/pki/tls/certs/filebeat.crt"]
+shipper:
+logging:
+  files:
+    rotateeverybytes: 10485760 # = 10MB

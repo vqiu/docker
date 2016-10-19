@@ -1,0 +1,27 @@
+version: '2'
+services:
+  lb:
+    image: haproxy:1.6-alpine
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./haproxy/config:/usr/local/etc/haproxy
+    links:
+      - web01
+      - web02
+    depends_on:
+      - web01
+      - web02
+
+  web01:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./www:/usr/share/nginx/html
+
+  web02:
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./www:/usr/share/nginx/html
