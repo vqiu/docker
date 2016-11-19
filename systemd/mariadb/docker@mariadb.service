@@ -4,11 +4,11 @@ After=docker.service
 Requires=docker.service
 
 [Service]
+EnvironmentFile=/etc/docker/mariadb.env
 TimeoutStartSec=0
 ExecStartPre=-/bin/docker kill ${NAME}
-ExecStartPre=-/bin/docker rm -f db
+ExecStartPre=-/bin/docker rm -f ${NAME}
 ExecStartPre=-/bin/docker pull mariadb:${VERSION}
-EnvironmentFile=/etc/docker/mariadb.env
 ExecStart=/bin/docker \
             run \
             -e "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" \
@@ -16,7 +16,7 @@ ExecStart=/bin/docker \
             -e "MYSQL_USER=${MYSQL_USER}" \
             -e "MYSQL_PASSWORD=${MYSQL_PASSWORD}" \
             --volume /data/dbData:/var/lib/mysql \
-            --name db \
+            --name ${NAME} \
             mariadb:${VERSION}
 
 ExecStop=-/bin/docker stop ${NAME}
